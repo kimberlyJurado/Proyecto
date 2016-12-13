@@ -11,19 +11,19 @@ package identidades;
  */
 public class Vendedor {
     
-    private int id_vendedor;
     private String nombre;
     private int cedula;
     private String email;
     private int usuario;
+    private int id_vendedor;
     private int telefono;
 
-    public Vendedor(int id_vendedor, String nombre, int cedula, String email, int usuario, int telefono) {
-        this.id_vendedor = id_vendedor;
+    public Vendedor(String nombre, int cedula, String email, int usuario, int id_vendedor, int telefono) {
         this.nombre = nombre;
         this.cedula = cedula;
         this.email = email;
         this.usuario = usuario;
+        this.id_vendedor = id_vendedor;
         this.telefono = telefono;
     }
 
@@ -33,14 +33,6 @@ public class Vendedor {
         this.email = email;
         this.usuario = usuario;
         this.telefono = telefono;
-    }
-
-    public int getId_vendedor() {
-        return id_vendedor;
-    }
-
-    public void setId_vendedor(int id_vendedor) {
-        this.id_vendedor = id_vendedor;
     }
 
     public String getNombre() {
@@ -75,6 +67,14 @@ public class Vendedor {
         this.usuario = usuario;
     }
 
+    public int getId_vendedor() {
+        return id_vendedor;
+    }
+
+    public void setId_vendedor(int id_vendedor) {
+        this.id_vendedor = id_vendedor;
+    }
+
     public int getTelefono() {
         return telefono;
     }
@@ -82,6 +82,7 @@ public class Vendedor {
     public void setTelefono(int telefono) {
         this.telefono = telefono;
     }
+
     
     
 }

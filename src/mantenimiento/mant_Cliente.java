@@ -5,8 +5,10 @@
  */
 package mantenimiento;
 
+import RepositoryMantenimiento.Manteni_Cliente;
 import com.demo.ui.Inicio;
 import com.demo.ui.conexion;
+import identidades.Cliente;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +20,8 @@ import javax.swing.JOptionPane;
  * @author USUARIO
  */
 public class mant_Cliente extends javax.swing.JFrame {
-
+    
+Manteni_Cliente mc=new Manteni_Cliente();
     /**
      * Creates new form Cliente
      */
@@ -219,7 +222,8 @@ public class mant_Cliente extends javax.swing.JFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
-        Modificar();
+        Cliente cl=new Cliente(txtnombre.getText(),txtcedula.getText(),txtdireccion.getText(),txtcorreo_electronico.getText(),txtapellidos.getText(),txttelefono.getText(),Integer.parseInt(txtid_cliente.getText())); 
+        mc.Modificar(cl);
         btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
@@ -227,27 +231,39 @@ public class mant_Cliente extends javax.swing.JFrame {
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
         // TODO add your handling code here:
-        Grabar();
+        Cliente cl=new Cliente(txtnombre.getText(),txtcedula.getText(),txtdireccion.getText(),txtcorreo_electronico.getText(),txtapellidos.getText(),txttelefono.getText());
+        mc.Grabar(cl);
         JOptionPane.showMessageDialog(null,"Grabado Exitosamente");
         Limpiar();
     }//GEN-LAST:event_btnGrabarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
+        
          btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
-        Eliminar();
+        mc.Eliminar(Integer.parseInt(txtid_cliente.getText()));
         JOptionPane.showMessageDialog(null,"ELIMINADO EXITOSAMENTE");
         Limpiar();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         // TODO add your handling code here:
+        Cliente cl= mc.Consultar(txtcedula.getText());
+        
+        txtnombre.setText(cl.getNombres());
+        txtcedula.setText(cl.getCedula());
+        txtdireccion.setText(cl.getDireccion());
+        txtcorreo_electronico.setText(cl.getCorreo_electronico());
+        txtapellidos.setText(cl.getApellidos());
+        txttelefono.setText(cl.getTelefono());
+        txtid_cliente.setText(Integer.toString(cl.getId_cliente()));
+        
         btnGrabar.setEnabled(false);
         btnModificar.setEnabled(true);
         btnEliminar.setEnabled(true);
-         Consultar();
+        mc.Consultar(txtcedula.getText());
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -315,72 +331,7 @@ public class mant_Cliente extends javax.swing.JFrame {
     private javax.swing.JTextField txttelefono;
     // End of variables declaration//GEN-END:variables
 
-public void Eliminar(){
-    conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareStatement("DELETE FROM cliente WHERE id_cliente="+txtid_cliente.getText());
-        re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-      System.out.println("ERROR: "+ex.getMessage());  
-    }
-}
-    public void Modificar(){
-    conexion con= new conexion();
-    try{
-        Connection cone =con.conexion();
-        PreparedStatement re=cone.prepareStatement("UPDATE cliente SET nombres=?,cedula=?,direccion=?,correo_electronico=?,apellidos=?,telefono=? WHERE id_cliente="+txtid_cliente.getText());
-        re.setString(1, txtnombre.getText());
-              re.setString(2, txtcedula.getText());
-              re.setString(3, txtdireccion.getText());
-              re.setString(4, txtcorreo_electronico.getText());
-              re.setString(5, txtapellidos.getText());
-              re.setString(6, txttelefono.getText());
-              re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Consultar(){
-    conexion con = new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareCall("SELECT * FROM cliente WHERE nombres='"+txtnombre.getText()+"'");
-        ResultSet ra=re.executeQuery();
-        while(ra.next()){
-            txtid_cliente.setText(ra.getString(7));
-            txtnombre.setText(ra.getString(1));
-            txtcedula.setText(ra.getString(2));
-            txtdireccion.setText(ra.getString(3));
-            txtcorreo_electronico.setText(ra.getString(4));
-            txtapellidos.setText(ra.getString(5));
-            txttelefono.setText(ra.getString(6));
-        }
-        cone.close();
-        
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Grabar(){
-    conexion con= new conexion();
-        try{
-            Connection cone=con.conexion();
-              PreparedStatement re=cone.prepareStatement("INSERT INTO cliente(nombres,cedula,direccion,correo_electronico,apellidos,telefono)VALUES(?,?,?,?,?,?)");
-              re.setString(1, txtnombre.getText());
-              re.setString(2, txtcedula.getText());
-              re.setString(3, txtdireccion.getText());
-              re.setString(4, txtcorreo_electronico.getText());
-              re.setString(5, txtapellidos.getText());
-              re.setString(6, txttelefono.getText());
-              re.executeUpdate();
-        cone.close();
-        }catch(SQLException ex){
-            System.out.println("ERROR: "+ex.getMessage());
-        }
-}
+
 public void Limpiar(){
     txtnombre.setText("");
     txtcedula.setText("");
@@ -390,4 +341,5 @@ public void Limpiar(){
     txtcorreo_electronico.setText("");
     txttelefono.setText("");
 }
+
 }

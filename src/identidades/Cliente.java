@@ -11,39 +11,31 @@ package identidades;
  */
 public class Cliente {
     
-    private int id_cliente;
     private String nombres;
-    private String apellidos;
-    private int cedula;
+    private String cedula;
     private String direccion;
-    private String correo_electronico;
-    private int telefono;
+      private String correo_electronico;
+    private String apellidos;
+    private String telefono;
+     private int id_cliente;
 
-    public Cliente(int id_cliente, String nombres, String apellidos, int cedula, String direccion, String correo_electronico, int telefono) {
-        this.id_cliente = id_cliente;
+    public Cliente(String nombres, String cedula, String direccion, String correo_electronico, String apellidos, String telefono, int id_cliente) {
         this.nombres = nombres;
-        this.apellidos = apellidos;
         this.cedula = cedula;
         this.direccion = direccion;
         this.correo_electronico = correo_electronico;
+        this.apellidos = apellidos;
         this.telefono = telefono;
+        this.id_cliente = id_cliente;
     }
 
-    public Cliente(String nombres, String apellidos, int cedula, String direccion, String correo_electronico, int telefono) {
+    public Cliente(String nombres, String cedula, String direccion, String correo_electronico, String apellidos, String telefono){
         this.nombres = nombres;
-        this.apellidos = apellidos;
         this.cedula = cedula;
         this.direccion = direccion;
         this.correo_electronico = correo_electronico;
+        this.apellidos = apellidos;
         this.telefono = telefono;
-    }
-    
-    public int getId_cliente() {
-        return id_cliente;
-    }
-
-    public void setId_cliente(int id_cliente) {
-        this.id_cliente = id_cliente;
     }
 
     public String getNombres() {
@@ -54,19 +46,11 @@ public class Cliente {
         this.nombres = nombres;
     }
 
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public int getCedula() {
+    public String getCedula() {
         return cedula;
     }
 
-    public void setCedula(int cedula) {
+    public void setCedula(String cedula) {
         this.cedula = cedula;
     }
 
@@ -86,13 +70,29 @@ public class Cliente {
         this.correo_electronico = correo_electronico;
     }
 
-    public int getTelefono() {
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-    
-    
+
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
+    }
+
+         
     }

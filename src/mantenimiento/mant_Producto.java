@@ -5,8 +5,10 @@
  */
 package mantenimiento;
 
+import RepositoryMantenimiento.manty_Producto;
 import com.demo.ui.Inicio;
 import com.demo.ui.conexion;
+import identidades.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,15 +20,13 @@ import javax.swing.JOptionPane;
  * @author USUARIO
  */
 public class mant_Producto extends javax.swing.JFrame {
-
+manty_Producto mpro=new manty_Producto();
     /**
      * Creates new form Producto
      */
     public mant_Producto() {
         initComponents();
         this.setLocationRelativeTo(null);
-        CargarMarca();
-        CargarProveedor();
     }
 
     /**
@@ -236,7 +236,8 @@ public class mant_Producto extends javax.swing.JFrame {
         btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
-        Modificar();
+        ;
+        mpro.Modificar(pr);
         JOptionPane.showMessageDialog(null,"MODIFICADO EXITOSAMENTE");
         Limpiar();
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -329,129 +330,13 @@ public class mant_Producto extends javax.swing.JFrame {
     private javax.swing.JTextField txtid_producto;
     // End of variables declaration//GEN-END:variables
 
-public void Grabar(){
-    conexion con= new conexion();
-        try{
-            Connection cone=con.conexion();
-              PreparedStatement re=cone.prepareStatement("INSERT INTO producto(nombre,marca,cantidad,precio, id_proveedor)VALUES(?,?,?,?,?)");
-              re.setString(1, txtNombre.getText());
-              re.setString(2, cbMarca.getSelectedItem().toString());
-              re.setInt(3, Integer.parseInt(txtCantidad.getText()) );
-              re.setDouble(4, Double.parseDouble(txtPrecio.getText()));
-              re.setInt(5, Cargarid_proveedor());
-              re.executeUpdate();
-        cone.close();
-        }catch(SQLException ex){
-            System.out.println("ERROR: "+ex.getMessage());
-        }
-}
+
 public void Limpiar(){
     txtNombre.setText("");
     cbMarca.setSelectedIndex(-1);
     txtCantidad.setText("");
     txtPrecio.setText("");
     txtid_producto.setText("");
-    
-}
-
-public void CargarMarca(){
-    conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareCall("SELECT * FROM marca");
-        ResultSet ra=re.executeQuery();
-        while(ra.next()){
-            cbMarca.addItem(ra.getString(1));
-            
-        }
-        cbMarca.setSelectedIndex(-1);
-        cone.close();
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Consultar(){
-    conexion con = new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareCall("SELECT producto.*,proveedor.nombre FROM producto inner join proveedor on producto.id_proveedor=proveedor.id_proveedor WHERE producto.nombre='"+txtNombre.getText()+"'");
-        ResultSet ra=re.executeQuery();
-        while(ra.next()){
-            txtid_producto.setText(ra.getString(5));
-            txtNombre.setText(ra.getString(1));
-            cbMarca.setSelectedItem(ra.getString(2));
-            txtCantidad.setText(ra.getString(3));
-            txtPrecio.setText(ra.getString(4));
-            cbProveedor.setSelectedItem(ra.getString(7));
-        }
-        cone.close();
-        
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Modificar(){
-    conexion con= new conexion();
-    try{
-        Connection cone =con.conexion();
-        PreparedStatement re=cone.prepareStatement("UPDATE producto SET nombre=?,marca=?,cantidad=?,precio=?, id_proveedor=? WHERE id_producto="+txtid_producto.getText());
-        re.setString(1, txtNombre.getText());
-              re.setString(2, cbMarca.getSelectedItem().toString());
-              re.setInt(3, Integer.parseInt(txtCantidad.getText()) );
-              re.setDouble(4, Double.parseDouble(txtPrecio.getText()));
-              re.setInt(5, Cargarid_proveedor());
-              re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Eliminar(){
-    conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareStatement("DELETE FROM producto WHERE id_producto="+txtid_producto.getText());
-        re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-      System.out.println("ERROR: "+ex.getMessage());  
-    }
-}
-
-public void CargarProveedor(){
-    conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareCall("Select nombre from proveedor");
-        ResultSet rst=re.executeQuery();
-        while(rst.next()){
-            cbProveedor.addItem(rst.getString(1));
-            
-        }
-        cbProveedor.setSelectedIndex(-1);
-       
-    }catch(SQLException ex){
-      System.out.println("ERROR: "+ex.getMessage()); 
-    }
-    
-    
-}
-
-public int Cargarid_proveedor(){
-     conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareCall("Select id_proveedor from proveedor where nombre='"+cbProveedor.getSelectedItem().toString()+"'");
-        ResultSet rst=re.executeQuery();
-       rst.next();
-       return rst.getInt(1);
-       
-       
-    }catch(SQLException ex){
-      System.out.println("ERROR: "+ex.getMessage());
-      return -1;
-    }
-    
     
 }
 }

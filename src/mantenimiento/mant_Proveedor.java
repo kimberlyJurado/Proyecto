@@ -5,8 +5,10 @@
  */
 package mantenimiento;
 
+import RepositoryMantenimiento.Mante_Proveedor;
 import com.demo.ui.Inicio;
 import com.demo.ui.conexion;
+import identidades.Proveedor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +20,7 @@ import javax.swing.JOptionPane;
  * @author USUARIO
  */
 public class mant_Proveedor extends javax.swing.JFrame {
-
+Mante_Proveedor mp= new Mante_Proveedor();
     /**
      * Creates new form Proveedor
      */
@@ -215,18 +217,26 @@ public class mant_Proveedor extends javax.swing.JFrame {
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         // TODO add your handling code here:
+        
            btnGrabar.setEnabled(false);
         btnModificar.setEnabled(true);
         btnEliminar.setEnabled(true);
-        Consultar();
+       Proveedor pv= mp.Consultar(txtCedula.getText());
+       txtNombre.setText(pv.getNombre());
+       txtCedula.setText(pv.getCedula());
+       txtTelefono.setText(pv.getTelefono());
+       txtDireccion.setText(pv.getDireccion());
+       txtEmail.setText(pv.getEmail());
+       txtId_proveedor.setText(Integer.toString(pv.getId_proveedor()));
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
+        Proveedor pv= new Proveedor(txtNombre.getText(),txtCedula.getText(),txtTelefono.getText(),txtEmail.getText(),txtId_proveedor.getText());
          btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
-        Modificar();
+        mp.Modificar(pv);
         JOptionPane.showMessageDialog(null,"MODIFICADO EXITOSAMENTE");
         Limpiar();
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -236,14 +246,15 @@ public class mant_Proveedor extends javax.swing.JFrame {
         btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false); 
-Eliminar();
+mp.Eliminar(Integer.parseInt(txtId_proveedor.getText()));
         JOptionPane.showMessageDialog(null,"ELIMINADO EXITOSAMENTE");
         Limpiar();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
         // TODO add your handling code here:
-        Grabar();
+        Proveedor pv= new Proveedor(txtNombre.getText(),txtCedula.getText(),txtTelefono.getText(),txtDireccion.getText(),txtEmail.getText());
+        mp.Grabar(pv);
         JOptionPane.showMessageDialog(null,"Grabado Exitosamente");
         Limpiar();
     }//GEN-LAST:event_btnGrabarActionPerformed
@@ -311,23 +322,7 @@ Eliminar();
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 
- public void Grabar(){
-    conexion con= new conexion();
-        try{
-            Connection cone=con.conexion();
-              PreparedStatement re=cone.prepareStatement("INSERT INTO proveedor(nombre,cedula,telefono, direccion, email)VALUES(?,?,?,?,?)");
-              re.setString(1, txtNombre.getText());
-              re.setString(2, txtCedula.getText());
-              re.setString(3, txtTelefono.getText());
-              re.setString(4, txtDireccion.getText());
-              re.setString(5, txtEmail.getText());
-              
-              re.executeUpdate();
-        cone.close();
-        }catch(SQLException ex){
-            System.out.println("ERROR: "+ex.getMessage());
-        }
-}
+ 
 public void Limpiar(){
     txtId_proveedor.setText("");
     txtNombre.setText("");
@@ -337,57 +332,4 @@ public void Limpiar(){
     txtEmail.setText("");
 
 }
-
-public void Consultar(){
-    conexion con = new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareCall("SELECT * FROM proveedor WHERE nombre='"+txtNombre.getText()+"'");
-        ResultSet ra=re.executeQuery();
-        while(ra.next()){
-            txtId_proveedor.setText(ra.getString(6));
-            txtNombre.setText(ra.getString(1));
-            txtCedula.setText(ra.getString(2));
-            txtTelefono.setText(ra.getString(5));
-            txtDireccion.setText(ra.getString(3));
-            txtEmail.setText(ra.getString(4));
-            
-            
-        }
-        cone.close();
-        
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Modificar(){
-    conexion con= new conexion();
-    try{
-        Connection cone =con.conexion();
-        PreparedStatement re=cone.prepareStatement("UPDATE proveedor SET id_proveedor=?,nombre=?,cedula=?,telefono=?, direccion=?, email=? WHERE id_proveedor="+txtId_proveedor.getText());
-        re.setInt(1, Integer.parseInt(txtId_proveedor.getText()));
-        re.setString(2, txtNombre.getText());
-        re.setString(3, txtCedula.getText());
-        re.setString(4, txtTelefono.getText());
-        re.setString(5,txtDireccion.getText());
-        re.setString(6, txtEmail.getText());
-       
-        re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Eliminar(){
-    conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareStatement("DELETE FROM proveedor WHERE id_proveedor="+txtId_proveedor.getText());
-        re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-      System.out.println("ERROR: "+ex.getMessage());  
-    }
-}
-
 }

@@ -5,8 +5,10 @@
  */
 package mantenimiento;
 
+import RepositoryMantenimiento.Mant_Marca;
 import com.demo.ui.Inicio;
 import com.demo.ui.conexion;
+import identidades.Marca;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +20,7 @@ import javax.swing.JOptionPane;
  * @author USUARIO
  */
 public class mant_marca extends javax.swing.JFrame {
-
+Mant_Marca mm=new Mant_Marca();
     /**
      * Creates new form mant_marca
      */
@@ -161,7 +163,8 @@ public class mant_marca extends javax.swing.JFrame {
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
         // TODO add your handling code here:
-        Grabar();
+        Marca ma=new Marca(txtNombre.getText());
+        mm.Grabar(ma);
         JOptionPane.showMessageDialog(null,"Grabado Exitosamente");
         Limpiar();
     }//GEN-LAST:event_btnGrabarActionPerformed
@@ -171,27 +174,29 @@ public class mant_marca extends javax.swing.JFrame {
          btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false); 
-Eliminar();
+        mm.Eliminar(Integer.parseInt(txtId_nombre.getText()));
         JOptionPane.showMessageDialog(null,"ELIMINADO EXITOSAMENTE");
         Limpiar();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
+        Marca ma=new Marca(txtNombre.getText(),Integer.parseInt(txtId_nombre.getText()));
         btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
-        Modificar();
+        mm.Modificar(ma);
         JOptionPane.showMessageDialog(null,"MODIFICADO EXITOSAMENTE");
         Limpiar();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         // TODO add your handling code here:
+        Marca ma=mm.Consultar(txtId_nombre.getText());
         btnGrabar.setEnabled(false);
         btnModificar.setEnabled(true);
         btnEliminar.setEnabled(true);
-        Consultar();
+        mm.Consultar(txtId_nombre.getText());
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     /**
@@ -241,68 +246,10 @@ Eliminar();
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
-public void Grabar(){
-    conexion con= new conexion();
-        try{
-            Connection cone=con.conexion();
-              PreparedStatement re=cone.prepareStatement("INSERT INTO marca(nombre)VALUES(?)");
-              re.setString(1, txtNombre.getText());
-   
-              re.executeUpdate();
-        cone.close();
-        }catch(SQLException ex){
-            System.out.println("ERROR: "+ex.getMessage());
-        }
-}
 public void Limpiar(){
     
     txtNombre.setText("");
     
 
 }
-
-public void Consultar(){
-    conexion con = new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareCall("SELECT * FROM marca WHERE nombre='"+txtNombre.getText()+"'");
-        ResultSet ra=re.executeQuery();
-        while(ra.next()){
-            txtId_nombre.setText(ra.getString(2));
-            txtNombre.setText(ra.getString(1));
-            
-            
-        }
-        cone.close();
-        
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Modificar(){
-    conexion con= new conexion();
-    try{
-        Connection cone =con.conexion();
-        PreparedStatement re=cone.prepareStatement("UPDATE marca SET id_nombre=?,nombre=? WHERE id_nombre="+txtId_nombre.getText());
-        re.setInt(1, Integer.parseInt(txtId_nombre.getText()));
-        re.setString(2, txtNombre.getText());
-        
-        re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Eliminar(){
-    conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareStatement("DELETE FROM marca WHERE id_nombre="+txtId_nombre.getText());
-        re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-      System.out.println("ERROR: "+ex.getMessage());  
-    }
-}
-
 }

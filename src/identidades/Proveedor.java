@@ -11,15 +11,23 @@ package identidades;
  */
 public class Proveedor {
  
-    private int id_proveedor;
     private String nombre;
-    private int cedula;
+    private String cedula;
     private String direccion;
     private String email;
-    private int telefono;
+    private String telefono;
+    private int id_proveedor;
 
-    public Proveedor(int id_proveedor, String nombre, int cedula, String direccion, String email, int telefono) {
+    public Proveedor(String nombre, String cedula, String direccion, String email, String telefono, int id_proveedor) {
+        this.nombre = nombre;
+        this.cedula = cedula;
+        this.direccion = direccion;
+        this.email = email;
+        this.telefono = telefono;
         this.id_proveedor = id_proveedor;
+    }
+
+    public Proveedor(String nombre, String cedula, String direccion, String email, String telefono) {
         this.nombre = nombre;
         this.cedula = cedula;
         this.direccion = direccion;
@@ -27,20 +35,8 @@ public class Proveedor {
         this.telefono = telefono;
     }
 
-    public Proveedor(String nombre, int cedula, String direccion, String email, int telefono) {
-        this.nombre = nombre;
-        this.cedula = cedula;
-        this.direccion = direccion;
-        this.email = email;
-        this.telefono = telefono;
-    }
-
-    public int getId_proveedor() {
-        return id_proveedor;
-    }
-
-    public void setId_proveedor(int id_proveedor) {
-        this.id_proveedor = id_proveedor;
+    public Proveedor(String text, String text0, String text1, String text2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getNombre() {
@@ -51,11 +47,11 @@ public class Proveedor {
         this.nombre = nombre;
     }
 
-    public int getCedula() {
+    public String getCedula() {
         return cedula;
     }
 
-    public void setCedula(int cedula) {
+    public void setCedula(String cedula) {
         this.cedula = cedula;
     }
 
@@ -75,12 +71,20 @@ public class Proveedor {
         this.email = email;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public int getId_proveedor() {
+        return id_proveedor;
+    }
+
+    public void setId_proveedor(int id_proveedor) {
+        this.id_proveedor = id_proveedor;
     }
     
     

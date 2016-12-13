@@ -11,15 +11,16 @@ package identidades;
  */
 public class usuario {
  
-    private int id_usuario;
+   
     private String nombre_usuario;
     private String contraseña;
+     private int id_usuario;
     private String nivel;
 
-    public usuario(int id_usuario, String nombre_usuario, String contraseña, String nivel) {
-        this.id_usuario = id_usuario;
+    public usuario(String nombre_usuario, String contraseña, int id_usuario, String nivel) {
         this.nombre_usuario = nombre_usuario;
         this.contraseña = contraseña;
+        this.id_usuario = id_usuario;
         this.nivel = nivel;
     }
 
@@ -27,14 +28,6 @@ public class usuario {
         this.nombre_usuario = nombre_usuario;
         this.contraseña = contraseña;
         this.nivel = nivel;
-    }
-
-    public int getId_usuario() {
-        return id_usuario;
-    }
-
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
     }
 
     public String getNombre_usuario() {
@@ -53,6 +46,14 @@ public class usuario {
         this.contraseña = contraseña;
     }
 
+    public int getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(int id_usuario) {
+        this.id_usuario = id_usuario;
+    }
+
     public String getNivel() {
         return nivel;
     }
@@ -60,6 +61,6 @@ public class usuario {
     public void setNivel(String nivel) {
         this.nivel = nivel;
     }
-    
+
     
 }
