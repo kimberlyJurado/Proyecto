@@ -16,9 +16,9 @@ public class Detalle_factura {
     private String nombre_producto;
     private String marca_producto;
     
-    private Factura factura;
+    private factura factura;
 
-    public Detalle_factura(int cantidad, int id_detalle_factura, String nombre_producto, String marca_producto, Factura factura) {
+    public Detalle_factura(int cantidad, int id_detalle_factura, String nombre_producto, String marca_producto, factura factura) {
         this.cantidad = cantidad;
         this.id_detalle_factura = id_detalle_factura;
         this.nombre_producto = nombre_producto;
@@ -26,7 +26,7 @@ public class Detalle_factura {
         this.factura = factura;
     }
 
-    public Detalle_factura(int cantidad, String nombre_producto, String marca_producto, Factura factura) {
+    public Detalle_factura(int cantidad, String nombre_producto, String marca_producto, factura factura) {
         this.cantidad = cantidad;
         this.nombre_producto = nombre_producto;
         this.marca_producto = marca_producto;
@@ -65,11 +65,11 @@ public class Detalle_factura {
         this.marca_producto = marca_producto;
     }
 
-    public Factura getFactura() {
+    public factura getFactura() {
         return factura;
     }
 
-    public void setFactura(Factura factura) {
+    public void setFactura(factura factura) {
         this.factura = factura;
     }
 

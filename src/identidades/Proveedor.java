@@ -87,5 +87,8 @@ public class Proveedor {
         this.id_proveedor = id_proveedor;
     }
     
-    
+    @Override
+    public String toString(){
+        return this.nombre;
+    }
 }

@@ -6,6 +6,11 @@
  */
 package com.demo.ui;
 
+import RepositoryMantenimiento.Factura_Repositorio;
+import RepositoryMantenimiento.Manteni_Cliente;
+import identidades.Clientes;
+import identidades.Detalle_factura;
+import identidades.factura;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -31,7 +36,8 @@ import javax.swing.table.TableModel;
  * @author USUARIO
  */
 public class Factura extends javax.swing.JFrame implements Printable {
-
+ Factura_Repositorio fat=new Factura_Repositorio();
+ Manteni_Cliente ml=new Manteni_Cliente();
     private DefaultTableModel TableModel;
     private int subtotal;
 
@@ -442,8 +448,8 @@ public class Factura extends javax.swing.JFrame implements Printable {
         // TODO add your handling code here:
         GuardarFactura();
         GuardarDetalleFactura();
-        RestarInventario();
-        actualizar();
+        fat.RestarInventario();
+        fat.actualizar();
         
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -477,7 +483,7 @@ public class Factura extends javax.swing.JFrame implements Printable {
 
     private void cbCargarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCargarProductoActionPerformed
         // TODO add your handling code here:
-        Producto pro= new Producto();
+        Productos pro= new Productos();
         pro.setVisible(true);
         
     }//GEN-LAST:event_cbCargarProductoActionPerformed
@@ -618,106 +624,25 @@ txtTotal.setText(Double.toString(tot));
 
 }
 public void GuardarDetalleFactura(){
-    conexion con=new conexion();
+    ArrayList<Detalle_factura> GF=new ArrayList<Detalle_factura>();
+   
+    factura fc =fat.RetornarFactura();
+    
+    
     int c=0;
     while(c<tb1.getRowCount()){
-    try{
-        
-        Connection cone=con.conexion();
-        PreparedStatement ps=cone.prepareStatement("INSERT INTO detalle_factura (id_factura,nombre_producto,marca_producto,cantidad)VALUES(?,?,?,?)");  
-        ps.setInt(1,buscaridFactura());
-        ps.setString(2,tb1.getValueAt(c, 0).toString());
-        ps.setString(3, tb1.getValueAt(c, 1).toString());
-        ps.setInt(4, Integer.parseInt(tb1.getValueAt(c, 2).toString()));
-        ps.executeUpdate();
-        c++;
-    }catch(SQLException ex){
-       System.out.println("ERROR:"+ex.getMessage()); 
+    
+        Detalle_factura Df=new Detalle_factura(Integer.parseInt(tb1.getValueAt(c, 2).toString()),tb1.getValueAt(c, 0).toString(),tb1.getValueAt(c, 1).toString(),fc);   
+    GF.add(Df);
+    c++;
     }
-    }
+    fat.GuardarDetalleFactura(GF);
 }
 public void GuardarFactura(){
-    conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement ps=cone.prepareStatement("INSERT INTO factura (id_cliente,fecha_emision,subtotal,iva,total,nombre_vendedor )VALUES(?,?,?,?,?,?)");
-        ps.setInt(1, buscaridCliente());
-        ps.setString(2, txtFecha.getText());
-        ps.setDouble(3,Double.parseDouble(txtSubTotal.getText()));
-        ps.setDouble(4, Double.parseDouble(txtIVA.getText()));
-        ps.setDouble(5, Double.parseDouble(txtTotal.getText()));
-        ps.setString(6, txtNombreVendedor.getText());
-        ps.executeUpdate();
-    }catch(SQLException ex){
-        System.out.println("ERROR:"+ex.getMessage());
-    }
-}
-public int buscaridCliente(){
-conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement ps=cone.prepareStatement("Select id_cliente From cliente Where nombres='"+txtNombres.getText()+"'");
-       ResultSet re=ps.executeQuery();
-       re.next();
-       return re.getInt(1);
-       
-    }catch(SQLException ex){
-        System.out.println("ERROR:"+ ex.getMessage());
-        return -1;
-    }
-}
-public int buscaridProducto(String Producto){
-conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement ps=cone.prepareStatement("Select id_producto From producto Where nombre='"+Producto+"'");
-        ResultSet re=ps.executeQuery();
-       re.next();
-       return re.getInt(1);
-       
-    }catch(SQLException ex){
-        System.out.println("ERROR:"+ ex.getMessage());
-        return -1;
-    }
-}
-public int buscaridFactura(){
- conexion con=new conexion();
- try{
-     Connection cone =con.conexion();
-     PreparedStatement ps=cone.prepareCall("SELECT id_factura FROM factura",1004,1007);
-     ResultSet re=ps.executeQuery();
-     re.last();
-     return re.getInt(1);
-     
- }catch(SQLException ex){
-     System.out.println("ERROR:"+ ex.getMessage());
-        return -1;
- }
-}
-public void RestarInventario(){
-    int c=0;
-    conexion con =new conexion();
-    while(c<tb1.getRowCount()){
-        try{
-          Connection cone =con.conexion();
-        PreparedStatement ps=cone.prepareStatement("UPDATE producto set cantidad=cantidad-"+tb1.getValueAt(c, 2)+"WHERE nombre='"+tb1.getValueAt(c,0).toString()+"'");
-        ps.executeUpdate();
-        c++;
-          
-        }catch(SQLException ex){
-         System.out.println("ERROR:"+ ex.getMessage());     
-    }
-}
-}
-public void actualizar(){
-    conexion con =new conexion();
-   try{
-       Connection cone =con.conexion();
-        PreparedStatement ps=cone.prepareStatement("DELETE FROM producto WHERE cantidad<1");
-        ps.executeUpdate();
-   }catch(SQLException ex){
-       
-   }
+    Clientes cl=ml.Consultar(txtCedula.getText());
+    factura hy=new factura(cl,txtFecha.getText(),Double.parseDouble(txtSubTotal.getText()),Double.parseDouble(txtIVA.getText()),Double.parseDouble(txtTotal.getText()),txtNombreVendedor.getText());
+    fat.GuardarFactura(hy);
+
 
 }
     @Override

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.demo.ui;
+import RepositoryMantenimiento.Manteni_Cliente;
 import javax.swing.DefaultListModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,7 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
+import identidades.Clientes;
 
 
 /**
@@ -24,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Cliente extends javax.swing.JFrame {
 
-
+Manteni_Cliente mc=new Manteni_Cliente();
 
     /**
      * Creates new form Cliente
@@ -259,7 +260,8 @@ public class Cliente extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        
+        identidades.Clientes cl=new identidades.Clientes(txtNombres.getText(),txtCedula.getText(),txtDireccion.getText(),txtCorreoElectronico.getText(),txtApellidos.getText(),txtTelefono.getText());
+        mc.Grabar(cl);
         if(txtNombres.getText().equals("")){
             JOptionPane.showMessageDialog(null,"Por Favor Ingrese Su Nombre ");
             return;
@@ -298,7 +300,7 @@ public class Cliente extends javax.swing.JFrame {
          
          JOptionPane.showMessageDialog(null, "Nombres:"+Nombres+"Apellidos:"+Apellidos+"Correo Electronico:"+CorreoElectronico+"Cedula:"+Cedula+"Telefono:"+Telefono+"Direccion:"+Direccion);
           
-         Guardar();
+        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -419,7 +421,16 @@ public class Cliente extends javax.swing.JFrame {
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         // TODO add your handling code here:
-        Consultar();
+        Clientes cl= mc.Consultar(txtCedula.getText());
+        
+        txtNombres.setText(cl.getNombres());
+        txtCedula.setText(cl.getCedula());
+        txtDireccion.setText(cl.getDireccion());
+        txtCorreoElectronico.setText(cl.getCorreo_electronico());
+        txtApellidos.setText(cl.getApellidos());
+        txtTelefono.setText(cl.getTelefono());
+        txtId_Cliente.setText(Integer.toString(cl.getId_cliente()));
+        
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirActionPerformed

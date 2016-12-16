@@ -6,11 +6,14 @@
 package RepositoryMantenimiento;
 
 import com.demo.ui.conexion;
+import identidades.Producto;
 import identidades.Proveedor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -57,13 +60,13 @@ public void Modificar(Proveedor pv){
     conexion con= new conexion();
     try{
         Connection cone =con.conexion();
-        PreparedStatement re=cone.prepareStatement("UPDATE proveedor SET id_proveedor=?,nombre=?,cedula=?,telefono=?, direccion=?, email=? WHERE id_proveedor=?");
+        PreparedStatement re=cone.prepareStatement("UPDATE proveedor SET nombre=?,cedula=?,telefono=?, direccion=?, email=? WHERE id_proveedor=?");
         re.setInt(6, pv.getId_proveedor());
         re.setString(1,pv.getNombre());
         re.setString(2,pv.getCedula());
-        re.setString(3,pv.getDireccion());
-        re.setString(4,pv.getEmail());
-        re.setString(5,pv.getTelefono());
+        re.setString(4,pv.getDireccion());
+        re.setString(5,pv.getEmail());
+        re.setString(3,pv.getTelefono());
        
         re.executeUpdate();
         cone.close();
@@ -82,5 +85,26 @@ public void Eliminar(int val){
     }catch(SQLException ex){
       System.out.println("ERROR: "+ex.getMessage());  
     }
+}
+public List<Proveedor> ObtenerProveedor(){
+        
+        conexion con = new conexion();
+        List<Proveedor> Proveedores=new ArrayList<Proveedor>();
+    try{
+        Connection cone=con.conexion();
+        PreparedStatement re=cone.prepareCall("SELECT * FROM proveedor");
+    
+        ResultSet ra=re.executeQuery();
+        while(ra.next()){
+           
+          Proveedor pv=new Proveedor(ra.getString(1),ra.getString(2),ra.getString(3),ra.getString(4),ra.getString(5),ra.getInt(6));
+       Proveedores.add(pv);
+        }
+        cone.close();
+        return Proveedores;
+    }catch(SQLException ex){
+        System.out.println("ERROR: "+ex.getMessage());
+        return null;
+}
 }
 }

@@ -12,13 +12,13 @@ package identidades;
 public class Vendedor {
     
     private String nombre;
-    private int cedula;
+    private String cedula;
     private String email;
-    private int usuario;
+   private usuario usuario;
     private int id_vendedor;
-    private int telefono;
+    private String telefono;
 
-    public Vendedor(String nombre, int cedula, String email, int usuario, int id_vendedor, int telefono) {
+    public Vendedor(String nombre, String cedula, String email, usuario usuario, int id_vendedor, String telefono) {
         this.nombre = nombre;
         this.cedula = cedula;
         this.email = email;
@@ -27,7 +27,7 @@ public class Vendedor {
         this.telefono = telefono;
     }
 
-    public Vendedor(String nombre, int cedula, String email, int usuario, int telefono) {
+    public Vendedor(String nombre, String cedula, String email, usuario usuario, String telefono) {
         this.nombre = nombre;
         this.cedula = cedula;
         this.email = email;
@@ -43,11 +43,11 @@ public class Vendedor {
         this.nombre = nombre;
     }
 
-    public int getCedula() {
+    public String getCedula() {
         return cedula;
     }
 
-    public void setCedula(int cedula) {
+    public void setCedula(String cedula) {
         this.cedula = cedula;
     }
 
@@ -59,11 +59,11 @@ public class Vendedor {
         this.email = email;
     }
 
-    public int getUsuario() {
+    public usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(int usuario) {
+    public void setUsuario(usuario usuario) {
         this.usuario = usuario;
     }
 
@@ -75,14 +75,13 @@ public class Vendedor {
         this.id_vendedor = id_vendedor;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
-    
     
 }

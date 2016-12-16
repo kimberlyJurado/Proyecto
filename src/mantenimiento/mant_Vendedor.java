@@ -5,7 +5,11 @@
  */
 package mantenimiento;
 
+import RepositoryMantenimiento.Mante_Vendedor;
+import RepositoryMantenimiento.Usuario_Mante;
 import com.demo.ui.conexion;
+import identidades.Vendedor;
+import identidades.usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +21,8 @@ import javax.swing.JOptionPane;
  * @author USUARIO
  */
 public class mant_Vendedor extends javax.swing.JFrame {
-
+Mante_Vendedor mv= new Mante_Vendedor();
+Usuario_Mante um=new Usuario_Mante();
     /**
      * Creates new form Vendedor
      */
@@ -234,18 +239,30 @@ public class mant_Vendedor extends javax.swing.JFrame {
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         // TODO add your handling code here:
+        Vendedor vn=mv.Consultar(txtCedula.getText());
+        txtId_vendedor.setText(Integer.toString(vn.getId_vendedor()));
+        txtNombre.setText(vn.getNombre());
+        txtCedula.setText(vn.getCedula());
+        txtTelefono.setText(vn.getTelefono());
+        txtEmail.setText(vn.getEmail());
+        txtid_usuario.setText(Integer.toString(vn.getUsuario().getId_usuario()));
+        
            btnGrabar.setEnabled(false);
         btnModificar.setEnabled(true);
         btnEliminar.setEnabled(true); 
-        Consultar();
+       
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
+        usuario us=um.BuscarUsuario(Integer.parseInt(txtid_usuario.getText()));
+        Vendedor vt= new Vendedor(txtNombre.getText(),txtCedula.getText(),txtEmail.getText(),us,Integer.parseInt(txtId_vendedor.getText()),txtTelefono.getText());
+        
+        
           btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
-        Modificar();
+        mv.Modificar(vt);
         JOptionPane.showMessageDialog(null,"MODIFICADO EXITOSAMENTE");
         Limpiar();
         
@@ -256,7 +273,7 @@ public class mant_Vendedor extends javax.swing.JFrame {
         btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false); 
-        Eliminar();
+        mv.Eliminar(Integer.parseInt(txtId_vendedor.getText()));
         JOptionPane.showMessageDialog(null,"ELIMINADO EXITOSAMENTE");
         Limpiar();
         
@@ -265,7 +282,9 @@ public class mant_Vendedor extends javax.swing.JFrame {
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
         // TODO add your handling code here:
-         Grabar();
+         usuario us=um.BuscarUsuario(Integer.parseInt(txtid_usuario.getText()));
+        Vendedor vt= new Vendedor(txtNombre.getText(),txtCedula.getText(),txtEmail.getText(),us,txtTelefono.getText());
+        mv.Grabar(vt);
         JOptionPane.showMessageDialog(null,"Grabado Exitosamente");
         Limpiar();
     }//GEN-LAST:event_btnGrabarActionPerformed
@@ -337,23 +356,7 @@ public class mant_Vendedor extends javax.swing.JFrame {
     public static javax.swing.JTextField txtid_usuario;
     // End of variables declaration//GEN-END:variables
 
- public void Grabar(){
-    conexion con= new conexion();
-        try{
-            Connection cone=con.conexion();
-              PreparedStatement re=cone.prepareStatement("INSERT INTO vendedor(nombre,cedula,telefono, email,usuario)VALUES(?,?,?,?,?)");
-              
-              re.setString(1, txtNombre.getText());
-              re.setString(2, txtCedula.getText());
-              re.setString(3, txtTelefono.getText());
-              re.setString(4, txtEmail.getText());
-              re.setInt(5,Integer.parseInt(txtid_usuario.getText()));
-              re.executeUpdate();
-        cone.close();
-        }catch(SQLException ex){
-            System.out.println("ERROR: "+ex.getMessage());
-        }
-}
+ 
 public void Limpiar(){
     txtId_vendedor.setText("");
     txtNombre.setText("");
@@ -361,55 +364,6 @@ public void Limpiar(){
     txtTelefono.setText("");
     txtEmail.setText("");
     
-}
-
-public void Consultar(){
-    conexion con = new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareCall("SELECT * FROM vendedor WHERE nombre='"+txtNombre.getText()+"'");
-        ResultSet ra=re.executeQuery();
-        while(ra.next()){
-            txtId_vendedor.setText(ra.getString(5));
-            txtNombre.setText(ra.getString(1));
-            txtCedula.setText(ra.getString(2));
-            txtTelefono.setText(ra.getString(6));
-            txtEmail.setText(ra.getString(3));
-            txtid_usuario.setText(ra.getString(4));
-        }
-        cone.close();
-        
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Modificar(){
-    conexion con= new conexion();
-    try{
-        Connection cone =con.conexion();
-        PreparedStatement re=cone.prepareStatement("UPDATE vendedor SET nombre=?,cedula=?,telefono=?, email=?,usuario=? WHERE id_vendedor="+txtId_vendedor.getText());
-        
-        re.setString(1, txtNombre.getText());
-        re.setString(2, txtCedula.getText());
-        re.setString(3, txtTelefono.getText());
-        re.setString(4, txtEmail.getText());
-        re.setInt(5,Integer.parseInt(txtid_usuario.getText()));
-              re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Eliminar(){
-    conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareStatement("DELETE FROM vendedor WHERE id_vendedor="+txtId_vendedor.getText());
-        re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-      System.out.println("ERROR: "+ex.getMessage());  
-    }
 }
 
 }

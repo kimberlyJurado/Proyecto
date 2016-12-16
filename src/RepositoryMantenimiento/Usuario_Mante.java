@@ -18,14 +18,14 @@ import java.sql.SQLException;
  */
 public class Usuario_Mante {
     
-    public void Grabar(){
+    public void Grabar(usuario us){
     conexion con= new conexion();
         try{
             Connection cone=con.conexion();
               PreparedStatement re=cone.prepareStatement("INSERT INTO usuario(nombre_usuario,contraseña,nivel)VALUES(?,?,?)");
-              re.setString(1, txtNombre.getText());
-              re.setString(2, txtContraseña.getText());
-              re.setString(3, cbNivel.getSelectedItem().toString());
+              re.setString(1,us.getNombre_usuario());
+              re.setString(2,us.getContraseña());
+              re.setString(3,us.getNivel());
               re.executeUpdate();
         cone.close();
         }catch(SQLException ex){
@@ -55,11 +55,11 @@ public void Modificar(usuario us){
     conexion con= new conexion();
     try{
         Connection cone =con.conexion();
-        PreparedStatement re=cone.prepareStatement("UPDATE usuario SET id_usuario=?,nombre_usuario=?,contraseña=?,nivel=? WHERE id_usuario=?");
-        re.setInt(3,us.getId_usuario());
+        PreparedStatement re=cone.prepareStatement("UPDATE usuario SET nombre_usuario=?,contraseña=?,nivel=? WHERE id_usuario=?");
+        re.setInt(4,us.getId_usuario());
         re.setString(1,us.getNombre_usuario());
         re.setString(2,us.getContraseña());
-       re.setString(4,us.getNivel());
+       re.setString(3,us.getNivel());
         re.executeUpdate();
         cone.close();
     }catch(SQLException ex){
@@ -78,5 +78,24 @@ public void Eliminar(int val){
       System.out.println("ERROR: "+ex.getMessage());  
     }
 
+}
+public usuario BuscarUsuario(int val){
+    
+    conexion con = new conexion();
+    usuario us=null;
+    try{
+        Connection cone=con.conexion();
+        PreparedStatement re=cone.prepareCall("SELECT * FROM usuario WHERE id_usuario=?");
+        re.setInt(1, val);
+        ResultSet ra=re.executeQuery();
+        while(ra.next()){
+        us=new usuario(ra.getString(1),ra.getString(2),ra.getInt(3),ra.getString(4));    
+        }
+        cone.close();
+        return us;
+    }catch(SQLException ex){
+        System.out.println("ERROR: "+ex.getMessage());
+        return null;
+    }
 }
 }

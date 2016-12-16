@@ -5,12 +5,14 @@
  */
 package RepositoryMantenimiento;
 
-import identidades.Cliente;
+import identidades.Clientes;
 import com.demo.ui.conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -18,16 +20,16 @@ import java.sql.SQLException;
  */
 public class Manteni_Cliente {
     
-    public Cliente Consultar(String val){
+    public Clientes Consultar(String val){
     conexion con = new conexion();
-    Cliente cl =null;
+    Clientes cl =null;
     try{
         Connection cone=con.conexion();
         PreparedStatement re=cone.prepareCall("SELECT * FROM cliente WHERE cedula=?");
         re.setString(1, val);
         ResultSet ra=re.executeQuery();
         while(ra.next()){
-            cl= new Cliente(ra.getString(1),ra.getString(2),ra.getString(3),ra.getString(4),ra.getString(5),ra.getString(6),ra.getInt(7));
+            cl= new Clientes(ra.getString(1),ra.getString(2),ra.getString(3),ra.getString(4),ra.getString(5),ra.getString(6),ra.getInt(7));
         }
         cone.close();
         return cl;
@@ -49,7 +51,7 @@ public class Manteni_Cliente {
         System.out.println("ERROR: "+ex.getMessage());  
         }
     }
-    public void Modificar(Cliente cl){
+    public void Modificar(Clientes cl){
     conexion con= new conexion();
     try{
         Connection cone =con.conexion();
@@ -68,7 +70,7 @@ public class Manteni_Cliente {
     }
     }
     
-    public void Grabar(Cliente cl){
+    public void Grabar(Clientes cl){
     conexion con= new conexion();
         try{
             Connection cone=con.conexion();
@@ -85,5 +87,27 @@ public class Manteni_Cliente {
             System.out.println("ERROR: "+ex.getMessage());
         }
 }
-    
+   public List <Clientes> ObtenerCliente(){
+       
+       conexion con = new conexion();
+       List<Clientes> Clientes=new ArrayList<Clientes>();
+
+    try{
+        Connection cone=con.conexion();
+        PreparedStatement re=cone.prepareCall("SELECT * FROM cliente");
+        
+        ResultSet ra=re.executeQuery();
+        while(ra.next()){
+           Clientes cl= new Clientes(ra.getString(1),ra.getString(2),ra.getString(3),ra.getString(4),ra.getString(5),ra.getString(6),ra.getInt(7));
+       Clientes.add(cl);
+        }
+        cone.close();
+        return Clientes;
+    }catch(SQLException ex){
+        System.out.println("ERROR: "+ex.getMessage());
+        return null;
+   } 
+}
+   
+   
 }

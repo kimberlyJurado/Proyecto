@@ -192,11 +192,12 @@ Mant_Marca mm=new Mant_Marca();
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         // TODO add your handling code here:
-        Marca ma=mm.Consultar(txtId_nombre.getText());
+        Marca ma=mm.Consultar(txtNombre.getText());
         btnGrabar.setEnabled(false);
         btnModificar.setEnabled(true);
         btnEliminar.setEnabled(true);
-        mm.Consultar(txtId_nombre.getText());
+       txtId_nombre.setText(Integer.toString(ma.getId_nombre()));
+       txtNombre.setText(ma.getNombre());
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     /**

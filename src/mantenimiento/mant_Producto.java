@@ -5,14 +5,19 @@
  */
 package mantenimiento;
 
+import RepositoryMantenimiento.Mant_Marca;
+import RepositoryMantenimiento.Mante_Proveedor;
 import RepositoryMantenimiento.manty_Producto;
 import com.demo.ui.Inicio;
 import com.demo.ui.conexion;
+import identidades.Marca;
 import identidades.Producto;
+import identidades.Proveedor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,12 +26,16 @@ import javax.swing.JOptionPane;
  */
 public class mant_Producto extends javax.swing.JFrame {
 manty_Producto mpro=new manty_Producto();
+Mante_Proveedor mprov=new Mante_Proveedor();
+Mant_Marca mma=new Mant_Marca();
     /**
      * Creates new form Producto
      */
     public mant_Producto() {
         initComponents();
         this.setLocationRelativeTo(null);
+        CargarCombo();
+        CargarComboMarca();
     }
 
     /**
@@ -52,8 +61,8 @@ manty_Producto mpro=new manty_Producto();
         btnModificar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        cbMarca = new javax.swing.JComboBox<>();
-        cbProveedor = new javax.swing.JComboBox<>();
+        cbMarca = new javax.swing.JComboBox();
+        cbProveedor = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -225,19 +234,31 @@ manty_Producto mpro=new manty_Producto();
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         // TODO add your handling code here:
+        Producto prod=mpro.Consultar(txtNombre.getText());
+        
+        txtid_producto.setText(Integer.toString(prod.getId_producto()));
+        txtNombre.setText(prod.getNombre());
+        cbMarca.setSelectedItem(prod.getMarca());
+        txtCantidad.setText(Integer.toString(prod.getCantidad()));
+        txtPrecio.setText(Double.toString(prod.getPrecio()));
+        cbProveedor.setSelectedItem(prod.getProveedor().getNombre());
+        
         btnGrabar.setEnabled(false);
         btnModificar.setEnabled(true);
-        btnEliminar.setEnabled(true); 
-        Consultar();
+        btnEliminar.setEnabled(true);
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
+        Proveedor prov=(Proveedor)cbProveedor.getSelectedItem();
+        Marca mar=(Marca)cbMarca.getSelectedItem();
+        
+        Producto produ=new Producto(txtNombre.getText(),mar.getNombre(),Integer.parseInt(txtCantidad.getText()),Double.parseDouble(txtPrecio.getText()),Integer.parseInt(txtid_producto.getText()),prov);
         btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
-        ;
-        mpro.Modificar(pr);
+        
+       mpro.Modificar(produ);
         JOptionPane.showMessageDialog(null,"MODIFICADO EXITOSAMENTE");
         Limpiar();
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -247,14 +268,18 @@ manty_Producto mpro=new manty_Producto();
          btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
-        Eliminar();
+        mpro.Eliminar(Integer.parseInt(txtid_producto.getText()));
         JOptionPane.showMessageDialog(null,"ELIMINADO EXITOSAMENTE");
         Limpiar();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
         // TODO add your handling code here:
-        Grabar();
+        Proveedor prov=(Proveedor)cbProveedor.getSelectedItem();
+        Marca mar=(Marca)cbMarca.getSelectedItem();
+        
+        Producto produ=new Producto(txtNombre.getText(),mar.getNombre(),Integer.parseInt(txtCantidad.getText()),Double.parseDouble(txtPrecio.getText()),prov);
+       mpro.Grabar(produ);
         JOptionPane.showMessageDialog(null,"Grabado Exitosamente");
         Limpiar();
     }//GEN-LAST:event_btnGrabarActionPerformed
@@ -316,8 +341,8 @@ manty_Producto mpro=new manty_Producto();
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGrabar;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JComboBox<String> cbMarca;
-    private javax.swing.JComboBox<String> cbProveedor;
+    private javax.swing.JComboBox cbMarca;
+    private javax.swing.JComboBox cbProveedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -339,4 +364,25 @@ public void Limpiar(){
     txtid_producto.setText("");
     
 }
+
+public void CargarCombo(){
+
+    List <Proveedor> Lp=mprov.ObtenerProveedor();
+    cbProveedor.removeAllItems();
+    for(Proveedor pt:Lp){
+        cbProveedor.addItem(pt);
+        
+        
+    }
+}
+    public void CargarComboMarca(){
+     
+       List<Marca> Mp= mma.ObtenerMarca();
+       cbMarca.removeAllItems();
+       for(Marca nm:Mp){
+           cbMarca.addItem(nm);
+       }
+    }
+    
+
 }

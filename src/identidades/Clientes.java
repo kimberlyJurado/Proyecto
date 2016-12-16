@@ -9,7 +9,7 @@ package identidades;
  *
  * @author Usuario
  */
-public class Cliente {
+public class Clientes {
     
     private String nombres;
     private String cedula;
@@ -19,7 +19,7 @@ public class Cliente {
     private String telefono;
      private int id_cliente;
 
-    public Cliente(String nombres, String cedula, String direccion, String correo_electronico, String apellidos, String telefono, int id_cliente) {
+    public Clientes(String nombres, String cedula, String direccion, String correo_electronico, String apellidos, String telefono, int id_cliente) {
         this.nombres = nombres;
         this.cedula = cedula;
         this.direccion = direccion;
@@ -29,7 +29,7 @@ public class Cliente {
         this.id_cliente = id_cliente;
     }
 
-    public Cliente(String nombres, String cedula, String direccion, String correo_electronico, String apellidos, String telefono){
+    public Clientes(String nombres, String cedula, String direccion, String correo_electronico, String apellidos, String telefono){
         this.nombres = nombres;
         this.cedula = cedula;
         this.direccion = direccion;

@@ -5,10 +5,15 @@
  */
 package com.demo.ui;
 
+import RepositoryMantenimiento.Mante_Vendedor;
+import RepositoryMantenimiento.Repositorio_Consulta;
+import identidades.Vendedor;
+import identidades.consulta_f;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,7 +21,8 @@ import javax.swing.table.DefaultTableModel;
  * @author USUARIO
  */
 public class consulta extends javax.swing.JFrame {
-
+    Repositorio_Consulta rc= new Repositorio_Consulta();
+    Mante_Vendedor ly= new Mante_Vendedor();
     /**
      * Creates new form consulta
      */
@@ -264,19 +270,13 @@ public void Limpiar(){
     cbVendedor.setSelectedIndex(-1);
 }
 public void CargarVendedor(){
-    conexion con=new conexion();
-    try{
-        Connection conex=con.conexion();
-        PreparedStatement pst=conex.prepareCall("SELECT nombre FROM vendedor");
-        ResultSet rs=pst.executeQuery();
-        while(rs.next()){
-            cbVendedor.addItem(rs.getString(1));
-        }
-        cbVendedor.setSelectedIndex(-1);
-    }catch(SQLException ex){
-        System.out.println(ex.getMessage());
+    List<Vendedor> lv= ly.ObtenerVendedores();
+    cbVendedor.removeAllItems();
+    for(Vendedor qi:lv){
+        cbVendedor.addItem(qi.getNombre());
+        
     }
-    
+    cbVendedor.setSelectedIndex(-1);
 }
 
 public void Consulta(){
@@ -297,17 +297,18 @@ public void Buscar(String sql){
     DefaultTableModel modelo= (DefaultTableModel) jtVendedor.getModel();
     modelo.setRowCount(0);
     Object tabla[]=new Object[5];
+    List<consulta_f> tr= rc.Buscar(sql);
     conexion con=new conexion();
     try{
     Connection conex=con.conexion();
         PreparedStatement pst=conex.prepareCall(sql);
         ResultSet rs=pst.executeQuery();
-        while(rs.next()){
-            tabla[0]=rs.getString(1);
-            tabla[1]=rs.getString(8);
-            tabla[2]=rs.getString(6);
-            tabla[3]=rs.getString(5) + " " + rs.getString(4);
-            tabla[4]=rs.getString(7);
+        for(consulta_f uy:tr){
+            tabla[0]=uy.getId_factura();
+            tabla[1]=uy.getFechaEmision();
+            tabla[2]=uy.getVendedor();
+            tabla[3]=uy.getProducto();
+            tabla[4]=uy.getTotal();
             modelo.addRow(tabla);
             
         }

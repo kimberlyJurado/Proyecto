@@ -232,7 +232,7 @@ Mante_Proveedor mp= new Mante_Proveedor();
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
-        Proveedor pv= new Proveedor(txtNombre.getText(),txtCedula.getText(),txtTelefono.getText(),txtEmail.getText(),txtId_proveedor.getText());
+        Proveedor pv= new Proveedor(txtNombre.getText(),txtCedula.getText(),txtDireccion.getText(),txtEmail.getText(),txtTelefono.getText(),Integer.parseInt(txtId_proveedor.getText()));
          btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);

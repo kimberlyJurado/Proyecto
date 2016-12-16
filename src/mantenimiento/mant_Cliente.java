@@ -8,7 +8,7 @@ package mantenimiento;
 import RepositoryMantenimiento.Manteni_Cliente;
 import com.demo.ui.Inicio;
 import com.demo.ui.conexion;
-import identidades.Cliente;
+import identidades.Clientes;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -222,7 +222,7 @@ Manteni_Cliente mc=new Manteni_Cliente();
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
-        Cliente cl=new Cliente(txtnombre.getText(),txtcedula.getText(),txtdireccion.getText(),txtcorreo_electronico.getText(),txtapellidos.getText(),txttelefono.getText(),Integer.parseInt(txtid_cliente.getText())); 
+        Clientes cl=new Clientes(txtnombre.getText(),txtcedula.getText(),txtdireccion.getText(),txtcorreo_electronico.getText(),txtapellidos.getText(),txttelefono.getText(),Integer.parseInt(txtid_cliente.getText())); 
         mc.Modificar(cl);
         btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
@@ -231,7 +231,7 @@ Manteni_Cliente mc=new Manteni_Cliente();
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
         // TODO add your handling code here:
-        Cliente cl=new Cliente(txtnombre.getText(),txtcedula.getText(),txtdireccion.getText(),txtcorreo_electronico.getText(),txtapellidos.getText(),txttelefono.getText());
+        Clientes cl=new Clientes(txtnombre.getText(),txtcedula.getText(),txtdireccion.getText(),txtcorreo_electronico.getText(),txtapellidos.getText(),txttelefono.getText());
         mc.Grabar(cl);
         JOptionPane.showMessageDialog(null,"Grabado Exitosamente");
         Limpiar();
@@ -250,7 +250,7 @@ Manteni_Cliente mc=new Manteni_Cliente();
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         // TODO add your handling code here:
-        Cliente cl= mc.Consultar(txtcedula.getText());
+        Clientes cl= mc.Consultar(txtcedula.getText());
         
         txtnombre.setText(cl.getNombres());
         txtcedula.setText(cl.getCedula());

@@ -5,8 +5,10 @@
  */
 package mantenimiento;
 
+import RepositoryMantenimiento.Usuario_Mante;
 import com.demo.ui.Inicio;
 import com.demo.ui.conexion;
+import identidades.usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +20,7 @@ import javax.swing.JOptionPane;
  * @author USUARIO
  */
 public class mant_usuario extends javax.swing.JFrame {
-
+Usuario_Mante US=new Usuario_Mante();
     /**
      * Creates new form mant_usuario
      */
@@ -207,18 +209,26 @@ public class mant_usuario extends javax.swing.JFrame {
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         // TODO add your handling code here:
+        usuario us= US.Consultar(txtNombre.getText());
+        
+        txtNombre.setText(us.getNombre_usuario());
+        txtContraseña.setText(us.getContraseña());
+        txtid_usuario.setText(Integer.toString(us.getId_usuario()));
+        cbNivel.setSelectedItem(us.getNivel());
+        
          btnGrabar.setEnabled(false);
         btnModificar.setEnabled(true);
         btnEliminar.setEnabled(true);
-        Consultar();
+        
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
+    usuario us=new usuario(txtNombre.getText(),txtContraseña.getText(),Integer.parseInt(txtid_usuario.getText()),cbNivel.getSelectedItem().toString());
          btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
-        Modificar();
+        US.Modificar(us);
         JOptionPane.showMessageDialog(null,"MODIFICADO EXITOSAMENTE");
         Limpiar();
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -228,16 +238,16 @@ public class mant_usuario extends javax.swing.JFrame {
         btnGrabar.setEnabled(true);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false); 
-Eliminar();
+        US.Eliminar(Integer.parseInt(txtid_usuario.getText()));
         JOptionPane.showMessageDialog(null,"ELIMINADO EXITOSAMENTE");
         Limpiar();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
         // TODO add your handling code here:
-        Grabar();
+        usuario us=new usuario(txtNombre.getText(),txtContraseña.getText(),cbNivel.getSelectedItem().toString());
+        US.Grabar(us);
         JOptionPane.showMessageDialog(null,"Grabado Exitosamente");
-        Consultaid_usuario();
         Limpiar();
         
     }//GEN-LAST:event_btnGrabarActionPerformed
@@ -251,7 +261,7 @@ Eliminar();
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        mant_Vendedor.txtid_usuario.setText(id_referencia.getText());
+        mant_Vendedor.txtid_usuario.setText(txtid_usuario.getText());
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -312,20 +322,7 @@ Eliminar();
     private javax.swing.JTextField txtid_usuario;
     // End of variables declaration//GEN-END:variables
 
-public void Grabar(){
-    conexion con= new conexion();
-        try{
-            Connection cone=con.conexion();
-              PreparedStatement re=cone.prepareStatement("INSERT INTO usuario(nombre_usuario,contraseña,nivel)VALUES(?,?,?)");
-              re.setString(1, txtNombre.getText());
-              re.setString(2, txtContraseña.getText());
-              re.setString(3, cbNivel.getSelectedItem().toString());
-              re.executeUpdate();
-        cone.close();
-        }catch(SQLException ex){
-            System.out.println("ERROR: "+ex.getMessage());
-        }
-}
+
 public void Limpiar(){
     txtid_usuario.setText("");
     txtNombre.setText("");
@@ -333,65 +330,4 @@ public void Limpiar(){
 cbNivel.setSelectedIndex(-1);
 }
 
-public void Consultar(){
-    conexion con = new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareCall("SELECT * FROM usuario WHERE nombre_usuario='"+txtNombre.getText()+"'");
-        ResultSet ra=re.executeQuery();
-        while(ra.next()){
-            txtid_usuario.setText(ra.getString(3));
-            txtNombre.setText(ra.getString(1));
-            txtContraseña.setText(ra.getString(2));
-            cbNivel.setSelectedItem(ra.getString(4));
-        }
-        cone.close();
-        
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Modificar(){
-    conexion con= new conexion();
-    try{
-        Connection cone =con.conexion();
-        PreparedStatement re=cone.prepareStatement("UPDATE usuario SET id_usuario=?,nombre_usuario=?,contraseña=?,nivel=? WHERE id_usuario="+txtid_usuario.getText());
-        re.setInt(1, Integer.parseInt(txtid_usuario.getText()));
-        re.setString(2, txtNombre.getText());
-        re.setString(3, txtContraseña.getText());
-       re.setString(4, cbNivel.getSelectedItem().toString());
-        re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
-public void Eliminar(){
-    conexion con=new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareStatement("DELETE FROM usuario WHERE id_usuario="+txtid_usuario.getText());
-        re.executeUpdate();
-        cone.close();
-    }catch(SQLException ex){
-      System.out.println("ERROR: "+ex.getMessage());  
-    }
-}
-public void Consultaid_usuario(){
-    
-conexion con = new conexion();
-    try{
-        Connection cone=con.conexion();
-        PreparedStatement re=cone.prepareCall("SELECT * FROM usuario WHERE nombre_usuario='"+txtNombre.getText()+"'");
-        ResultSet ra=re.executeQuery();
-        while(ra.next()){
-            id_referencia.setText(ra.getString(3));
-            
-        }
-        cone.close();
-        
-    }catch(SQLException ex){
-        System.out.println("ERROR: "+ex.getMessage());
-    }
-}
 }

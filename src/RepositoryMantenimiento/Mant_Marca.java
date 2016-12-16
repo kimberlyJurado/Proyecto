@@ -7,10 +7,14 @@ package RepositoryMantenimiento;
 
 import com.demo.ui.conexion;
 import identidades.Marca;
+import identidades.Producto;
+import identidades.Proveedor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -54,7 +58,8 @@ public void Modificar(Marca ma){
     conexion con= new conexion();
     try{
         Connection cone =con.conexion();
-        PreparedStatement re=cone.prepareStatement("UPDATE marca SET id_nombre=?,nombre=? WHERE id_nombre=?");
+        PreparedStatement re=cone.prepareStatement("UPDATE marca SET nombre=? WHERE id_nombre=?");
+       
         re.setInt(2,ma.getId_nombre());
         re.setString(1,ma.getNombre());
         re.executeUpdate();
@@ -74,5 +79,26 @@ public void Eliminar(int val){
     }catch(SQLException ex){
       System.out.println("ERROR: "+ex.getMessage());  
     }
+}
+public List<Marca> ObtenerMarca(){
+    
+      conexion con = new conexion();
+      List<Marca> Marcas=new ArrayList<Marca>();
+ 
+    try{
+        Connection cone=con.conexion();
+        PreparedStatement re=cone.prepareCall("SELECT * FROM marca");
+       
+        ResultSet ra=re.executeQuery();
+        while(ra.next()){
+           Marca ma=new Marca(ra.getString(1),ra.getInt(2));
+            Marcas.add(ma);
+        }
+        cone.close();
+        return Marcas;
+    }catch(SQLException ex){
+        System.out.println("ERROR: "+ex.getMessage());
+        return null;
+}
 }
 }

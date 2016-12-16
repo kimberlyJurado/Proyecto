@@ -6,11 +6,14 @@
 package com.demo.ui;
 
 
+import RepositoryMantenimiento.manty_Producto;
+import identidades.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,16 +21,16 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author USUARIO
  */
-public class Producto extends javax.swing.JFrame {
-
+public class Productos extends javax.swing.JFrame {
+manty_Producto mpro=new manty_Producto();
     /**
      * Creates new form Producto
      */
-    public Producto() {
+    public Productos() {
         initComponents();
     }
 
-    private Producto(String text) {
+    private Productos(String text) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -374,20 +377,21 @@ public class Producto extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Producto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Producto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Producto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Producto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Producto().setVisible(true);
+                new Productos().setVisible(true);
             }
         });
     }
@@ -422,118 +426,93 @@ public class Producto extends javax.swing.JFrame {
     
     public void busqueda1(){
     Object parametro="'"+txtParametro.getText()+"'";
-       
+        String SQL="SELECT producto.*,proveedor.* FROM producto inner join proveedor on producto.id_proveedor=proveedor.id_proveedor WHERE producto.nombre="+parametro;
     DefaultTableModel te=(DefaultTableModel)tbProducto.getModel();
-    conexion con= new conexion();
-      Object ma[]={"","","",""};
-        try{
-            Connection cone=con.conexion();
-            PreparedStatement re=cone.prepareCall("SELECT nombre,marca,cantidad,precio FROM producto WHERE nombre="+parametro);
-            ResultSet rc=re.executeQuery();
-            while(rc.next()){
-              
-                 ma[0]=rc.getString(1);
-                 ma[1]=rc.getString(2);
-                 ma[2]=rc.getInt(3);
-                 ma[3]=rc.getDouble(4);
-                 te.addRow(ma);
-                 
-            }
-            tbProducto.setModel(te);
-            }catch(SQLException ec){
-            }
     
+    List<Producto> po=mpro.ObtenerProductos(SQL);
+   
+      Object ma[]=new Object[4];
+   for(Producto py:po){
+       ma[0]=py.getNombre();
+                 ma[1]=py.getMarca();
+                 ma[2]=py.getCantidad();
+                 ma[3]=py.getPrecio();
+                 te.addRow(ma);
+   }              
+
+            tbProducto.setModel(te);
 }
 public void BuscarTodo(){
     DefaultTableModel te=(DefaultTableModel)tbProducto.getModel();
-    conexion con= new conexion();
-      Object ma[]={"","","",""};
-        try{
-            Connection cone=con.conexion();
-            PreparedStatement re=cone.prepareCall("SELECT nombre,marca,cantidad,precio FROM producto");
-            ResultSet rc=re.executeQuery();
-            while(rc.next()){
-              
-                 ma[0]=rc.getString(1);
-                 ma[1]=rc.getString(2);
-                 ma[2]=rc.getInt(3);
-                 ma[3]=rc.getDouble(4);
+    String SQL="SELECT producto.*,proveedor.* FROM producto inner join proveedor on producto.id_proveedor=proveedor.id_proveedor";
+    List<Producto> po=mpro.ObtenerProductos(SQL);
+   
+      Object ma[]=new Object[4];
+   for(Producto py:po){
+       ma[0]=py.getNombre();
+                 ma[1]=py.getMarca();
+                 ma[2]=py.getCantidad();
+                 ma[3]=py.getPrecio();
                  te.addRow(ma);
-                 
-            }
+   }              
+
             tbProducto.setModel(te);
-            }catch(SQLException ec){
-                System.out.println(ec.getMessage());
-}
+           
 }
 public void busqueda2(){
     Object parametro="'"+txtParametro.getText()+"'";
-       
+        String SQL="SELECT producto.*,proveedor.* FROM producto inner join proveedor on producto.id_proveedor=proveedor.id_proveedor WHERE producto.marca="+parametro;
     DefaultTableModel te=(DefaultTableModel)tbProducto.getModel();
-    conexion con= new conexion();
-      Object ma[]={"","","",""};
-        try{
-            Connection cone=con.conexion();
-            PreparedStatement re=cone.prepareCall("SELECT nombre,marca,cantidad,precio FROM producto WHERE marca="+parametro);
-            ResultSet rc=re.executeQuery();
-            while(rc.next()){
-              
-                 ma[0]=rc.getString(1);
-                 ma[1]=rc.getString(2);
-                 ma[2]=rc.getInt(3);
-                 ma[3]=rc.getDouble(4);
+    
+    List<Producto> po=mpro.ObtenerProductos(SQL);
+   
+      Object ma[]=new Object[4];
+   for(Producto py:po){
+       ma[0]=py.getNombre();
+                 ma[1]=py.getMarca();
+                 ma[2]=py.getCantidad();
+                 ma[3]=py.getPrecio();
                  te.addRow(ma);
-                 
-            }
+   }              
+
             tbProducto.setModel(te);
-            }catch(SQLException ec){
 }
-}
+
 public void busqueda3(){
-    Object parametro=Integer.parseInt(txtParametro.getText());
-       
+    Object parametro="'"+txtParametro.getText()+"'";
+        String SQL="SELECT producto.*,proveedor.* FROM producto inner join proveedor on producto.id_proveedor=proveedor.id_proveedor WHERE producto.cantidad="+parametro;
     DefaultTableModel te=(DefaultTableModel)tbProducto.getModel();
-    conexion con= new conexion();
-      Object ma[]={"","","",""};
-        try{
-            Connection cone=con.conexion();
-            PreparedStatement re=cone.prepareCall("SELECT nombre,marca,cantidad,precio FROM producto WHERE cantidad="+parametro);
-            ResultSet rc=re.executeQuery();
-            while(rc.next()){
-              
-                 ma[0]=rc.getString(1);
-                 ma[1]=rc.getString(2);
-                 ma[2]=rc.getInt(3);
-                 ma[3]=rc.getDouble(4);
+    
+    List<Producto> po=mpro.ObtenerProductos(SQL);
+   
+      Object ma[]=new Object[4];
+   for(Producto py:po){
+       ma[0]=py.getNombre();
+                 ma[1]=py.getMarca();
+                 ma[2]=py.getCantidad();
+                 ma[3]=py.getPrecio();
                  te.addRow(ma);
-                 
-            }
+   }              
+
             tbProducto.setModel(te);
-            }catch(SQLException ec){
-}
 }
 public void busqueda4(){
-    Object parametro=Double.parseDouble(txtParametro.getText());
-       
+    Object parametro=txtParametro.getText();
+        String SQL="SELECT producto.*,proveedor.* FROM producto inner join proveedor on producto.id_proveedor=proveedor.id_proveedor WHERE producto.precio="+parametro;
     DefaultTableModel te=(DefaultTableModel)tbProducto.getModel();
-    conexion con= new conexion();
-      Object ma[]={"","","",""};
-        try{
-            Connection cone=con.conexion();
-            PreparedStatement re=cone.prepareCall("SELECT nombre,marca,cantidad,precio FROM producto WHERE precio="+parametro);
-            ResultSet rc=re.executeQuery();
-            while(rc.next()){
-              
-                 ma[0]=rc.getString(1);
-                 ma[1]=rc.getString(2);
-                 ma[2]=rc.getInt(3);
-                 ma[3]=rc.getDouble(4);
+    
+    List<Producto> po=mpro.ObtenerProductos(SQL);
+   
+      Object ma[]=new Object[4];
+   for(Producto py:po){
+       ma[0]=py.getNombre();
+                 ma[1]=py.getMarca();
+                 ma[2]=py.getCantidad();
+                 ma[3]=py.getPrecio();
                  te.addRow(ma);
-                 
-            }
+   }              
+
             tbProducto.setModel(te);
-            }catch(SQLException ec){
-}
 }
 public void limpiar(){
     cbfiltro.setSelectedIndex(-1);
@@ -541,7 +520,5 @@ public void limpiar(){
    DefaultTableModel tb= (DefaultTableModel) tbProducto.getModel();
    tb.setRowCount(0);
    tbProducto.setModel(tb);
-
-    
 }
 }

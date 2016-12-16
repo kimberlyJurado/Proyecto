@@ -30,6 +30,7 @@ public class usuario {
         this.nivel = nivel;
     }
 
+
     public String getNombre_usuario() {
         return nombre_usuario;
     }

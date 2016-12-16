@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -36,12 +38,13 @@ public class manty_Producto {
         }
 }
 
-public Producto Consultar(String val){
+    public Producto Consultar(String val){
     conexion con = new conexion();
     Producto pr = null;
     try{
         Connection cone=con.conexion();
         PreparedStatement re=cone.prepareCall("SELECT producto.*,proveedor.* FROM producto inner join proveedor on producto.id_proveedor=proveedor.id_proveedor WHERE producto.nombre=?");
+        re.setString(1, val);
         ResultSet ra=re.executeQuery();
         while(ra.next()){
             Proveedor pro= new Proveedor(ra.getString(7),ra.getString(8),ra.getString(9),ra.getString(10),ra.getString(11),ra.getInt(12));
@@ -55,7 +58,7 @@ public Producto Consultar(String val){
         return null;
     }
 }
-public void Modificar(Producto pr){
+    public void Modificar(Producto pr){
     conexion con= new conexion();
     try{
         Connection cone =con.conexion();
@@ -72,7 +75,7 @@ public void Modificar(Producto pr){
         System.out.println("ERROR: "+ex.getMessage());
     }
 }
-public void Eliminar(int val){
+    public void Eliminar(int val){
     conexion con=new conexion();
     try{
         Connection cone=con.conexion();
@@ -83,5 +86,28 @@ public void Eliminar(int val){
     }catch(SQLException ex){
       System.out.println("ERROR: "+ex.getMessage());  
     }
-}
-}
+    }
+    public List<Producto> ObtenerProductos(String SQL){
+
+     conexion con = new conexion();
+     List<Producto> Productos=new ArrayList<Producto>();
+    
+    try{
+        Connection cone=con.conexion();
+        PreparedStatement re=cone.prepareCall(SQL);
+      
+        ResultSet ra=re.executeQuery();
+        while(ra.next()){
+            Proveedor pro= new Proveedor(ra.getString(7),ra.getString(8),ra.getString(9),ra.getString(10),ra.getString(11),ra.getInt(12));
+           Producto pr=new Producto(ra.getString(1),ra.getString(2),ra.getInt(3),ra.getDouble(4),ra.getInt(5),pro);
+        Productos.add(pr);
+        }
+        cone.close();
+        return Productos;
+    }catch(SQLException ex){
+        System.out.println("ERROR: "+ex.getMessage());
+        return null;
+    }
+    }
+    }
+    
